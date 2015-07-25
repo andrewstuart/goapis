@@ -2,6 +2,7 @@ package apis
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 )
@@ -22,6 +23,11 @@ func (c *Client) DefaultQuery(q Query) {
 }
 
 func (c *Client) Get(u string, q Query) (*http.Response, error) {
+	u = fmt.Sprintf("%s/%s?%s", c.Url, u, c.getQuery(&q).Encode())
+	return c.c.Get(u)
+}
+
+func (c *Client) getQuery(q *Query) *url.Values {
 	qs := url.Values{}
 
 	//Get defaults
@@ -29,12 +35,17 @@ func (c *Client) Get(u string, q Query) (*http.Response, error) {
 		qs[k] = []string{v}
 	}
 
-	//Add instance query
-	for k, v := range q {
-		qs[k] = []string{v}
+	if q != nil {
+		//Add instance query
+		for k, v := range *q {
+			qs[k] = []string{v}
+		}
 	}
 
-	u = fmt.Sprintf("%s/%s?%s", c.Url, u, qs.Encode())
+	return &qs
+}
 
-	return c.c.Get(u)
+func (c *Client) Post(u, t string, q Query, r io.Reader) (*http.Response, error) {
+	u = fmt.Sprintf("%s/%s?%s", c.Url, u, c.getQuery(&q).Encode())
+	return c.c.Post(u, t, r)
 }

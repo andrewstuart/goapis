@@ -18,6 +18,7 @@ func TestGet(t *testing.T) {
 
 		fmt.Fprintln(w, "")
 	}))
+
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
@@ -25,4 +26,6 @@ func TestGet(t *testing.T) {
 	c.DefaultQuery(Query{
 		"test": "test",
 	})
+
+	c.Get("", nil)
 }

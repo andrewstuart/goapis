@@ -18,7 +18,7 @@ func NewClient(url string) *Client {
 }
 
 //DefaultQuery sets a map to be used for each query and extended
-func (c *Client) DefaultQuery(q Query) {
+func (c *Client) DefaultParams(q Query) {
 	c.q = q
 }
 

@@ -23,7 +23,7 @@ func TestGet(t *testing.T) {
 
 	c := NewClient(ts.URL)
 
-	c.DefaultQuery(Query{
+	c.DefaultParams(Query{
 		"test": "test",
 	})
 
